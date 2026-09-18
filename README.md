@@ -67,7 +67,7 @@ The tests cover room sizes from 2 through 12 players, thinker rotation, private 
 4. On every device, open `http://YOUR_IPV4_ADDRESS:7000`, such as `http://192.168.1.25:7000`.
 5. Create a room on one device, share the five-character code, and join from the other devices.
 
-The lobby's **Copy link** and **Share room** buttons use the current page URL with `?room=CODE`. The QR button displays that same URL. Scanning it opens the join form with the room code already filled in; the player still chooses a name and avatar before joining.
+The lobby's **Copy link** and **Share room** buttons use the configured production origin with `/room/ROOM_CODE`. The QR button contains that same URL. Scanning it opens the join form with the room code already filled in; the player still chooses a name and avatar before joining.
 
 If Windows Firewall asks whether Node.js may communicate on the network, allow it for private networks. For players outside the local network, deploy the Node server to a host that supports WebSockets and share its HTTPS URL.
 

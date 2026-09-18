@@ -9,14 +9,21 @@ const server = http.createServer(app);
 const io = new Server(server, { connectionStateRecovery: { maxDisconnectionDuration: 120_000, skipMiddlewares: true } });
 const rooms = new Map();
 const PORT = process.env.PORT || 7000;
-const PUBLIC_GAME_URL = String(process.env.PUBLIC_GAME_URL || 'https://drawwhatimthinking.com').replace(/\/$/, '');
+const configuredPublicGameUrl = String(process.env.PUBLIC_GAME_URL || '').trim().replace(/\/$/, '');
+
+function publicGameUrlFor(request) {
+  if (configuredPublicGameUrl) return configuredPublicGameUrl;
+  const protocol = String(request.get('x-forwarded-proto') || request.protocol).split(',')[0].trim();
+  const host = String(request.get('x-forwarded-host') || request.get('host')).split(',')[0].trim();
+  return `${protocol}://${host}`.replace(/\/$/, '');
+}
 
 app.get('/room/:roomCode', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
-app.get('/runtime-config.js', (_req, res) => {
+app.get('/runtime-config.js', (req, res) => {
   res.set('Cache-Control', 'no-store');
-  res.type('application/javascript').send(`window.GAME_CONFIG = ${JSON.stringify({ publicGameUrl: PUBLIC_GAME_URL })};`);
+  res.type('application/javascript').send(`window.GAME_CONFIG = ${JSON.stringify({ publicGameUrl: publicGameUrlFor(req) })};`);
 });
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('/health', (_req, res) => res.json({ ok: true, rooms: rooms.size }));

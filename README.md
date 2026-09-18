@@ -37,13 +37,13 @@ npm start
 For deployment, set the public room origin before starting the server:
 
 ```powershell
-$env:PUBLIC_GAME_URL = "https://drawwhatimthinking.com"
+$env:PUBLIC_GAME_URL = "https://your-deployed-domain.example"
 npm.cmd start
 ```
 
-The default public origin is `https://drawwhatimthinking.com`. Change `PUBLIC_GAME_URL` to the real deployed domain for another deployment. Room links always use `/room/ROOM_CODE`, regardless of the internal server address.
+When `PUBLIC_GAME_URL` is empty, the server derives the public origin from the incoming request, so Render's deployed URL is used automatically. Set `PUBLIC_GAME_URL` only when you need to force a specific public domain. Room links always use `/room/ROOM_CODE`, regardless of the internal server address.
 
-`.env.example` contains the local environment values, and `render.yaml` provides a deployment template for a Node Web Service. Connect the repository to a hosting provider, set `PUBLIC_GAME_URL` to the domain actually attached to that service, and deploy. The game server must remain running for Socket.IO multiplayer rooms and WebRTC signaling to work; the repository alone cannot create DNS or a hosting account.
+`.env.example` contains the local environment values, and `render.yaml` provides a deployment template for a Node Web Service. Connect the repository to Render and deploy; the game server must remain running for Socket.IO multiplayer rooms and WebRTC signaling to work.
 
 For local development with Node's file watcher, the developer can run:
 

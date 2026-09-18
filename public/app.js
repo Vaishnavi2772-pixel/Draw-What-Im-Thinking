@@ -106,7 +106,7 @@ function renderLobby() {
   document.querySelector('#startButton')?.addEventListener('click', () => emit('start-game'));
   document.querySelector('#endButton')?.addEventListener('click', () => { if (confirm('End this room?')) emit('end-game'); });
 }
-function roomLink(code) { const publicOrigin = (window.GAME_CONFIG?.publicGameUrl || 'https://drawwhatimthinking.com').replace(/\/$/, ''); return `${publicOrigin}/room/${encodeURIComponent(code)}`; }
+function roomLink(code) { const publicOrigin = (window.GAME_CONFIG?.publicGameUrl || window.location.origin).replace(/\/$/, ''); return `${publicOrigin}/room/${encodeURIComponent(code)}`; }
 function qrUrl(code) { return `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(roomLink(code))}`; }
 async function copyRoomLink() { const link = roomLink(state.code); if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(link); else { const input = document.createElement('textarea'); input.value = link; document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove(); } showToast('✅ Room link copied!'); }
 async function shareRoom() { if (navigator.share) await navigator.share({ title: 'Draw What I’m Thinking', text: `🎮 Join my game! Room Code: ${state.code}`, url: roomLink(state.code) }); else copyRoomLink(); }

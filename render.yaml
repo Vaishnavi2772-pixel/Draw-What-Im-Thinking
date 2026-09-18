@@ -5,7 +5,5 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: PUBLIC_GAME_URL
-        value: https://drawwhatimthinking.com
       - key: NODE_VERSION
         value: 20

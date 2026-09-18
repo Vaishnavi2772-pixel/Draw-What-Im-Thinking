@@ -11,13 +11,14 @@ const rooms = new Map();
 const PORT = process.env.PORT || 7000;
 const PUBLIC_GAME_URL = String(process.env.PUBLIC_GAME_URL || 'https://drawwhatimthinking.com').replace(/\/$/, '');
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
-app.get('/runtime-config.js', (_req, res) => {
-  res.type('application/javascript').send(`window.GAME_CONFIG = ${JSON.stringify({ publicGameUrl: PUBLIC_GAME_URL })};`);
-});
-app.get('/room/:code', (_req, res) => {
+app.get('/room/:roomCode', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
+app.get('/runtime-config.js', (_req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.type('application/javascript').send(`window.GAME_CONFIG = ${JSON.stringify({ publicGameUrl: PUBLIC_GAME_URL })};`);
+});
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('/health', (_req, res) => res.json({ ok: true, rooms: rooms.size }));
 
 function emitRoom(room) {

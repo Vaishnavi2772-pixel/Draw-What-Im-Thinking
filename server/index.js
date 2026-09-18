@@ -99,6 +99,7 @@ io.on('connection', (socket) => {
   });
 
   roomAction('start-game', (room) => room.startGame());
+  roomAction('choose-game', (room, { gameMode }) => room.chooseGame(socket.id, gameMode));
   roomAction('set-game-settings', (room, settings) => room.setGameSettings(socket.id, settings));
   roomAction('remove-player', (room, { playerId }) => room.removePlayerByHost(socket.id, playerId));
   roomAction('voice-state', (room, { muted }) => room.setVoiceState(socket.id, muted));
@@ -110,6 +111,12 @@ io.on('connection', (socket) => {
   roomAction('submit-thought', (room, { answer }) => room.submitThought(socket.id, answer));
   roomAction('submit-clues', (room, { clues }) => room.submitClues(socket.id, clues));
   roomAction('submit-drawing', (room, { image }) => room.submitDrawing(socket.id, image));
+  roomAction('submit-guess', (room, { guess }) => room.submitGuess(socket.id, guess));
+  roomAction('react-drawing', (room, { number, reaction }) => room.reactToDrawing(socket.id, number, reaction));
+  roomAction('submit-who-vote', (room, { targetId }) => room.submitWhoVote(socket.id, targetId));
+  roomAction('resolve-who-tie', (room, { targetId }) => room.resolveWhoTie(socket.id, targetId));
+  roomAction('next-who-question', (room) => room.nextWhoQuestion(socket.id));
+  roomAction('play-another-game', (room, { gameMode }) => room.restartSelectedGame(socket.id, gameMode));
   roomAction('choose-drawing', (room, { number, funny }) => room.chooseDrawing(socket.id, number, funny));
   roomAction('next-round', (room) => room.nextRound(socket.id));
   roomAction('end-game', (room) => room.endGame(socket.id));
